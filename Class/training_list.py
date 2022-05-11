@@ -12,13 +12,16 @@ class TrainingList:
     def get_training_list(self):
         return self.__training
 
-    def set_traininig_list(self, xml: Optional[BeautifulSoup]):
-        if not xml:
-            logging.debug("xml is None")
-            raise ValueError("XML is unavailable")
+    def set_training_list(self, lst: pd.DataFrame):
+        self.__training = lst
 
-        lst = xml.find("srchList").findAll("scn_list")
-
+    def set_traininig_list_with_xml(self, xml: BeautifulSoup):
+        try:
+            lst = xml.find("srchList").findAll("scn_list")
+        except AttributeError as ae:
+            logging.debug(ae)
+            return None
+            
         # 검색된 데이터 갯수 갱신
         self.__list_cnt = int(xml.find("scn_cnt").text)
 
