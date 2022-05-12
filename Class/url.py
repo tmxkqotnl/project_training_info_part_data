@@ -1,50 +1,37 @@
-import logging
 from typing import Optional
 
-import requests
-import lxml
-from bs4 import BeautifulSoup
+
+def get_url_splitted(url: str) -> (str, dict[str, str]):
+    b_u, p = url.split("?")
+    p = {j[0]: j[1] for j in [i.split("=") for i in p.split("&")]}
+
+    return (b_u, p)
 
 
 class URL:
-    __request_url: Optional[str]
+    __url: Optional[str]
+    __parameter: dict[str, str]
 
     def __init__(self):
-        self.__request_url = None
+        self.__url: Optional[str] = None
+        self.__parameter = {}
 
-    def get_request_url(self):
-        return self.__request_url
+    def get_url(self):
+        return self.__url
 
-    def set_request_url(
-        self, r_url: str,
-    ):
-        self.__request_url = r_url
+    def set_url(self, url: str):
+        if url.find("?") != -1:
+            u, params = get_url_splitted(url)
 
-    def get_response(self) -> Optional[BeautifulSoup]:
-        if not self.__request_url:
-            logging.debug("URL get_reponse ERROR")
-            raise ValueError("request URL is None")
+            self.set_parameter(params)
+            self.set_url(u)
+        else:
+            self.__url = url
 
-        try:
-            res = requests.get(self.__request_url)
-            xml = BeautifulSoup(res.content, "lxml-xml")
+    def get_parameter(self):
+        return self.__parameter
 
-            xml_error_check = xml.find("error")
-            if xml_error_check:
-                logging.error(xml_error_check.text)
-                raise ValueError("parameter error")
-            else:
-                logging.debug('get reponse success')
-                return xml
-        # except requests.exceptions.Timeout as errd:
-        #     logging.exception("Timeout Error : ", errd)
-        # except requests.exceptions.ConnectionError as errc:
-        #     logging.exception("Error Connecting : ", errc)
-        # except requests.exceptions.HTTPError as errb:
-        #     logging.exception("Http Error : ", errb)
-        # Any Error except upper exception
-        except requests.exceptions.RequestException as erra:
-            logging.exception("Exception : ", erra)
-            return None
-        except ValueError:
-            return None
+    def set_parameter(self, dt: dict[str, str]):
+        for k, v in dt.items():
+            self.__parameter[k] = v
+

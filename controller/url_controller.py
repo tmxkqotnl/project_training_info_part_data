@@ -1,21 +1,47 @@
-from Class import URL
-from const import URLS
+import logging
+from typing import Optional
+import requests
+from bs4 import BeautifulSoup
+
 from libs import dict_to_query
+from Class import URL
 
 
-def set_this_request_url(
-    url: URL,
-    target: str = "training_list",
-    opts: dict[str, str] = {
-        "authKey": "hfI6LTOnqD5609y88FO2DHzf2OGCuFeO",
-        "returnType": "XML",  # only XML avaliable
-        "outType": "1",  # 1 - list, 2 - detail
-        "pageNum": "1",  # maximum 1000
-        "pageSize": "100",  # maximum 100
-        "sort": "ASC",
-        "sortCol": "TR_STT_DT",  # TOT_FXNUM - 모집인원, TR_STT_DT - 훈련시작일, TR_NM_i - 훈련과정명
-        "srchTraStDt": "19700101",  # 훈련 시작일
-        "srchTraEndDt": "20221231",  # 훈련 종료일
-    },
-):
-    url.set_request_url("?".join([URLS[target], dict_to_query(opts)]))
+def get_full_url(url: URL) -> Optional[str]:
+    try:
+        return "?".join([url.get_url(), dict_to_query(url.get_parameter())])
+    except Exception as e:
+        logging.error(e)
+        return None
+
+
+def get_response(url: URL, encoding: str = "utf-8") -> Optional[BeautifulSoup]:
+    if not url.get_url():
+        logging.debug("URL get_reponse ERROR")
+        raise ValueError("request URL is None")
+
+    try:
+        res = requests.get(get_full_url(url))
+        xml = BeautifulSoup(res.content, "lxml-xml", from_encoding=encoding)
+
+        xml_error_check = xml.find("error")
+        if xml_error_check:
+            logging.error("xml error check")
+            logging.error(xml)
+            raise ValueError("parameter error")
+        else:
+            logging.debug("get reponse success")
+            return xml
+    # except requests.exceptions.Timeout as errd:
+    #     logging.exception("Timeout Error : ", errd)
+    # except requests.exceptions.ConnectionError as errc:
+    #     logging.exception("Error Connecting : ", errc)
+    # except requests.exceptions.HTTPError as errb:
+    #     logging.exception("Http Error : ", errb)
+    # Any Error except upper exception
+    except requests.exceptions.RequestException as erra:
+        logging.exception(erra)
+        return None
+    except ValueError:
+        return None
+
