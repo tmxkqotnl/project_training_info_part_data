@@ -189,7 +189,7 @@ def get_training_inst_info_list(
         if tl_df is not None
         else [(params["srchTrprId"], params["srchTrprDegr"])]
     )
-    print(iterable)
+
     for i, n in iterable:
         params["srchTrprId"] = i
         params["srchTrprDegr"] = str(n)
