@@ -12,6 +12,12 @@ TRAINING_FOR_JOB_HUNTER = {
     "attendence_info": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA60/HRDPOA60_4.jsp",  # 구직자훈련과정 훈련생 출결정보
 }
 
+TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE = {
+    '목록':"default",
+    '시설':"facility_detail",
+    '장비':"eqnm_detail",
+}
+
 ## 공통코드 API
 
 ### URL
@@ -32,3 +38,4 @@ COMMON_CODE = {
     "훈련방법 코드": "10",
     "훈련기관 구분코드": "11",
 }
+

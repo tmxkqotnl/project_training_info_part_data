@@ -1,7 +1,16 @@
+import logging
+from typing import Optional
 from bs4 import BeautifulSoup
+from click import BadArgumentUsage
+import pandas as pd
+from Class import URL
+from const import TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE
+from controller.url_controller import get_response
 
 
-def parse_xml_agency_info_default(xml: BeautifulSoup):  ## 기본
+def parse_xml_agency_info_default(
+    xml: BeautifulSoup,
+) -> dict[str, Optional[str]]:  ## 기본
     instIno = xml.find("instIno")
     addr1 = xml.find("addr1")
     addr2 = xml.find("addr2")
@@ -92,7 +101,9 @@ def parse_xml_agency_info_default(xml: BeautifulSoup):  ## 기본
     }
 
 
-def parse_xml_agency_info_facility_detail(xml: BeautifulSoup):
+def parse_xml_agency_info_facility_detail(
+    xml: BeautifulSoup,
+) -> list[dict[str, Optional[str]]]:
     lst = []
 
     instIno = xml.find("instIno")
@@ -115,24 +126,85 @@ def parse_xml_agency_info_facility_detail(xml: BeautifulSoup):
     return lst
 
 
-def parse_xml_agency_info_facility_detail(xml: BeautifulSoup):
+def parse_xml_agency_info_inst_eqnm_info_list(
+    xml: BeautifulSoup,
+) -> list[dict[str, Optional[str]]]:
     lst = []
 
     instIno = xml.find("instIno")
-    for k in xml.findAll("inst_facility_info_list"):
+    for k in xml.findAll("inst_eqnm_info_list"):
         cstmrNm = k.find("cstmrNm")
-        fcltyArCn = k.find("fcltyArCn")
-        ocuAcptnNmprCn = k.find("ocuAcptnNmprCn")
-        trafcltyNm = k.find("trafcltyNm")
+        eqpmnNm = k.find("eqpmnNm")
+        holdQy = k.find("holdQy")
 
         lst.append(
             {
                 "훈련기관_코드": instIno.text if instIno else None,
                 "등록훈련기관": cstmrNm.text if cstmrNm else None,
-                "시설면적(m*m)": fcltyArCn.text if fcltyArCn else None,
-                "인원(명)": ocuAcptnNmprCn.text if ocuAcptnNmprCn else None,  # 수용인원
-                "시설명": trafcltyNm.text if trafcltyNm else None,
+                "장비명": eqpmnNm.text if eqpmnNm else None,
+                "보유 수량": holdQy.text if holdQy else None,  # 수용인원
             }
         )
 
     return lst
+
+
+def get_training_inst_info_list(
+    url: URL, save: bool = False, tl_df: Optional[pd.DataFrame] = None
+) -> pd.DataFrame:
+    params = url.get_parameter()
+    if (
+        params["srchTorgId"]
+        not in TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE.values()
+    ):
+        logging.debug("과정/기관정보 검색 유형이 잘못됨")
+        raise ValueError("잘못된 과정/기관정보 유형")
+
+    if tl_df is None and (
+        params["srchTrprDegr"] is None or params["srchTrprId"] is None
+    ):
+        logging.error("훈련과정ID 또는 훈련과정 회차를 입력해주세요.")
+        raise BadArgumentUsage("훈련과정ID 또는 훈련과정 회차 누락")
+
+    lst = []
+    func_list = None
+    func_type = None
+    file_name = None
+
+    if params["srchTorgId"] == TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE["목록"]:
+        func_list = lst.append
+        func_type = parse_xml_agency_info_default
+        file_name = "기관목록"
+    elif params["srchTorgId"] == TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE["시설"]:
+        func_list = lst.extend
+        func_type = parse_xml_agency_info_facility_detail
+        file_name = "시설목록"
+    else:  # 장비
+        func_list = lst.extend
+        func_type = parse_xml_agency_info_inst_eqnm_info_list
+        file_name = "장비목록"
+
+    iterable = (
+        tl_df.values
+        if tl_df is not None
+        else [(params["srchTrprId"], params["srchTrprDegr"])]
+    )
+    print(iterable)
+    for i, n in iterable:
+        params["srchTrprId"] = i
+        params["srchTrprDegr"] = str(n)
+
+        url.set_parameter(params)
+
+        xml: BeautifulSoup = get_response(url, encoding="euc-kr")
+
+        func_list(func_type(xml))
+
+    result = pd.DataFrame(lst)
+
+    if save:
+        result.to_csv(
+            "".join(["../files/for_job_hunter/", file_name, ".csv"]), index=False
+        )
+
+    return result
