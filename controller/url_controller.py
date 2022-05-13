@@ -22,9 +22,10 @@ def get_response(url: URL, encoding: str = "utf-8") -> Optional[BeautifulSoup]:
 
     try:
         res = requests.get(get_full_url(url))
+        
         xml = BeautifulSoup(res.content, "lxml-xml", from_encoding=encoding)
-
         xml_error_check = xml.find("error")
+        
         if xml_error_check:
             logging.error("xml error check")
             logging.error(xml)
