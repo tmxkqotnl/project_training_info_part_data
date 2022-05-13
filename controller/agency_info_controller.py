@@ -1,3 +1,6 @@
+from bs4 import BeautifulSoup
+
+
 def parse_xml_agency_info_default(xml: BeautifulSoup):  ## 기본
     instIno = xml.find("instIno")
     addr1 = xml.find("addr1")
