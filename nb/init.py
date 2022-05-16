@@ -4,6 +4,7 @@ from os.path import dirname, realpath, join
 
 from dotenv import load_dotenv
 
+cur_dir = dirname(realpath(__file__))
 parent_dir = dirname(dirname(realpath(__file__)))
 
 sys.path.append(parent_dir.replace("C:", "c:"))
