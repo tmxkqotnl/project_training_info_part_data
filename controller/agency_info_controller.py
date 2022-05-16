@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from click import BadArgumentUsage
 import pandas as pd
 from Class import URL
-from const import TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE
+from const import TRAINING_AGENCY_INFO_SEARCH_TYPE
 from controller.url_controller import get_api_response
 
 
@@ -153,10 +153,7 @@ def get_training_inst_info_list(
     url: URL, save: bool = False, tl_df: Optional[pd.DataFrame] = None
 ) -> pd.DataFrame:
     params = url.get_parameter()
-    if (
-        params["srchTorgId"]
-        not in TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE.values()
-    ):
+    if params["srchTorgId"] not in TRAINING_AGENCY_INFO_SEARCH_TYPE.values():
         logging.debug("과정/기관정보 검색 유형이 잘못됨")
         raise ValueError("잘못된 과정/기관정보 유형")
 
@@ -171,11 +168,11 @@ def get_training_inst_info_list(
     func_type = None
     file_name = None
 
-    if params["srchTorgId"] == TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE["목록"]:
+    if params["srchTorgId"] == TRAINING_AGENCY_INFO_SEARCH_TYPE["목록"]:
         func_list = lst.append
         func_type = parse_xml_agency_info_default
         file_name = "기관목록"
-    elif params["srchTorgId"] == TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE["시설"]:
+    elif params["srchTorgId"] == TRAINING_AGENCY_INFO_SEARCH_TYPE["시설"]:
         func_list = lst.extend
         func_type = parse_xml_agency_info_facility_detail
         file_name = "시설목록"
