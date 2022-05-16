@@ -32,10 +32,10 @@ def get_list(url: URL) -> Optional[TrainingList]:
             # "고용보험6개월 취업률": i.find("eiEmplRate6").text,
             "등급": i.find("grade").text,
             # "제목 아이콘 구분": i.find("imgGubun").text,
-            "훈련기관 코드": i.find("instCd").text,
-            "NCS 코드": i.find("ncsCd").text,
-            "실제 훈련비": i.find("realMan").text,
-            "수강신청 인원": i.find("regCourseMan").text,
+            "훈련기관_코드": i.find("instCd").text,
+            "NCS_코드": i.find("ncsCd").text,
+            "실제_훈련비": i.find("realMan").text,
+            "수강신청_인원": i.find("regCourseMan").text,
             "정원": i.find("yardMan").text,
             "제목": i.find("title").text,
             # "제목 링크": i.find("titleLink").text,
@@ -50,7 +50,7 @@ def get_list(url: URL) -> Optional[TrainingList]:
             "훈련구분": i.find("trainTargetCd").text,
             "훈련기관ID": i.find("trainstCstId").text,
             "훈련과정ID": i.find("trprId").text,  # primary key
-            "훈련과정 순차": i.find("trprDegr").text,
+            "훈련과정_순차": i.find("trprDegr").text,
         }
         for i in lst
     ]

@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 from typing import Optional
 import requests
 from bs4 import BeautifulSoup
@@ -15,17 +16,24 @@ def get_full_url(url: URL) -> Optional[str]:
         return None
 
 
-def get_response(url: URL, encoding: str = "utf-8") -> Optional[BeautifulSoup]:
+def get_response(
+    url: URL, encoding: str = "utf-8", feat: str = "xml"
+) -> Optional[BeautifulSoup]:
     if not url.get_url():
         logging.debug("URL get_reponse ERROR")
         raise ValueError("request URL is None")
 
     try:
         res = requests.get(get_full_url(url))
-        
-        xml = BeautifulSoup(res.content, "lxml-xml", from_encoding=encoding)
+
+        if feat == "xml":
+            feat = "lxml-xml"
+        elif feat == "html":
+            feat = "lxml"
+
+        xml = BeautifulSoup(res.content, feat, from_encoding=encoding)
         xml_error_check = xml.find("error")
-        
+
         if xml_error_check:
             logging.error("xml error check")
             logging.error(xml)
@@ -40,8 +48,16 @@ def get_response(url: URL, encoding: str = "utf-8") -> Optional[BeautifulSoup]:
     # except requests.exceptions.HTTPError as errb:
     #     logging.exception("Http Error : ", errb)
     # Any Error except upper exception
+    except requests.exceptions.MissingSchema as errm:
+        logging.exception(erra)
+
+        # temp
+        sleep(1)
+        get_response(url, encoding, feat)
+
     except requests.exceptions.RequestException as erra:
         logging.exception(erra)
+
         return None
     except ValueError:
         return None
