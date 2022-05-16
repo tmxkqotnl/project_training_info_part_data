@@ -5,7 +5,7 @@ from controller.url_controller import get_api_response
 import json
 
 
-def get_common_code(url: URL,save:bool=False):
+def get_all_common_code(url: URL, save: bool = False):
 
     df = pd.DataFrame(columns=["코드값", "코드명", "구분"])
 
@@ -19,7 +19,7 @@ def get_common_code(url: URL,save:bool=False):
 
         if c_name.__len__() != c_val.__len__():
             continue
-        
+
         tmp = pd.DataFrame({"코드값": c_val, "코드명": c_name})
         if save:
             file_name = "../files/common_code/" + "_".join(k.split()) + ".csv"
