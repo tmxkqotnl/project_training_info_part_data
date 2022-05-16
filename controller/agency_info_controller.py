@@ -5,7 +5,7 @@ from click import BadArgumentUsage
 import pandas as pd
 from Class import URL
 from const import TRAINING_FOR_JOB_HUNTER_AGENCY_INFO_SEARCH_TYPE
-from controller.url_controller import get_response
+from controller.url_controller import get_api_response
 
 
 def parse_xml_agency_info_default(
@@ -196,7 +196,7 @@ def get_training_inst_info_list(
 
         url.set_parameter(params)
 
-        xml: BeautifulSoup = get_response(url, encoding="euc-kr")
+        xml: BeautifulSoup = get_api_response(url, encoding="euc-kr")
 
         func_list(func_type(xml))
 
