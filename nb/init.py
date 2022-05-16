@@ -13,5 +13,5 @@ sys.path.append(join(parent_dir, "controller"))
 logging.basicConfig(
     filename="logs.log", encoding="utf-8", level=logging.DEBUG, filemode="a"
 )
-load_dotenv(dotenv_path="./.env", verbose=True)
+load_dotenv(dotenv_path="../.env", verbose=True)
 
