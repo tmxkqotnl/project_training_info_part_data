@@ -2,13 +2,13 @@ import logging
 import os
 from typing import Optional
 import pandas as pd
-from url_controller import get_response
+from url_controller import get_api_response
 from Class import TrainingList, URL
 from const import TRAINING_FOR_JOB_HUNTER
 
 
 def get_list(url: URL) -> Optional[TrainingList]:
-    xml = get_response(url)
+    xml = get_api_response(url)
 
     try:
         lst = xml.find("srchList").findAll("scn_list")

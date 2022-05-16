@@ -3,10 +3,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from Class.url import URL
 
-from controller.url_controller import get_response
+from controller.url_controller import get_api_response
 
 
-def parse_xml_training_schedule(xml: BeautifulSoup) -> pd.DataFrame:
+def parse_xml_training_schedule(xml: BeautifulSoup, training_id: str) -> pd.DataFrame:
     lst = []
     for i in xml.findAll("scn_list"):
         eiEmplRate3 = i.find("eiEmplRate3")
@@ -46,27 +46,34 @@ def parse_xml_training_schedule(xml: BeautifulSoup) -> pd.DataFrame:
                 "훈련_시작일": trStaDt.text if trStaDt is not None else None,
                 "훈련_종료일": trEndDt.text if trEndDt is not None else None,
                 "훈련과정_회차": trprDegr.text if trprDegr is not None else None,
+                "훈련과정ID": training_id,
             }
         )
     return pd.DataFrame(lst)
 
 
-def get_traininig_schedule_info(url: URL):
-    return parse_xml_training_schedule(get_response(url, feat="xml"))
+def get_traininig_schedule_info(url: URL, training_id: str):
+    return parse_xml_training_schedule(
+        get_api_response(url, feat="xml"), training_id=training_id
+    )
 
-def get_training_schedule_info_list(url:URL,df:pd.DataFrame):
-    
-    if not ['훈련과정ID','훈련과정_순차'] in df.keys():
-        logging.error('훈련과정ID, 훈련과정_순차 컬럼이 존재하지 않습니다.')
-        raise AttributeError('훈련과정ID, 훈련과정_순차 컬럼이 존재하지 않음')
-    
-    df = df[['훈련과정ID','훈련과정_순차']]
-    
+
+def get_training_schedule_info_list(url: URL, df: pd.DataFrame):
+
+    keys = df.keys().tolist()
+    if not "훈련과정_순차" in keys or not "훈련과정ID" in keys:
+        logging.error("훈련과정ID, 훈련과정_순차 컬럼이 존재하지 않습니다.")
+        raise AttributeError("훈련과정ID, 훈련과정_순차 컬럼이 존재하지 않음")
+
+    df = df[["훈련과정ID", "훈련과정_순차"]]
+
     lst = []
-    for i,n in df.values:
+    for i, n in df.values:
         params = url.get_parameter()
-        params['srchTrprId'] = i
+        params["srchTrprId"] = i
         if n is not None:
-            params['srchTrprDegr'] = n
-        
-        get_training_schedule_info(url)
+            params["srchTrprDegr"] = n
+
+        lst.append(get_traininig_schedule_info(url, i))
+
+    return pd.concat(lst, axis=0)

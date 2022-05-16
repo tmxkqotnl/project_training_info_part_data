@@ -16,7 +16,7 @@ def get_full_url(url: URL) -> Optional[str]:
         return None
 
 
-def get_response(
+def get_api_response(
     url: URL, encoding: str = "utf-8", feat: str = "xml"
 ) -> Optional[BeautifulSoup]:
     if not url.get_url():
@@ -53,7 +53,7 @@ def get_response(
 
         # temp
         sleep(1)
-        get_response(url, encoding, feat)
+        get_api_response(url, encoding, feat)
 
     except requests.exceptions.RequestException as erra:
         logging.exception(erra)
