@@ -54,7 +54,7 @@ def parse_xml_training_schedule(xml: BeautifulSoup, training_id: str) -> pd.Data
 
 def get_traininig_schedule_info(url: URL, training_id: str):
     return parse_xml_training_schedule(
-        get_api_response(url, feat="xml"), training_id=training_id
+        get_api_response(url), training_id=training_id
     )
 
 
