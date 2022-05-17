@@ -8,9 +8,7 @@ from const import TRAINING_AGENCY_INFO_SEARCH_TYPE
 from controller.url_controller import get_api_response
 
 
-def parse_xml_agency_info_default(
-    xml: BeautifulSoup,
-) -> dict[str, Optional[str]]:  ## 기본
+def parse_agency_info_default(xml: BeautifulSoup,) -> dict[str, Optional[str]]:  ## 기본
     instIno = xml.find("instIno")
     addr1 = xml.find("addr1")
     addr2 = xml.find("addr2")
@@ -101,7 +99,7 @@ def parse_xml_agency_info_default(
     }
 
 
-def parse_xml_agency_info_facility_detail(
+def parse_agency_info_facility_detail(
     xml: BeautifulSoup,
 ) -> list[dict[str, Optional[str]]]:
     lst = []
@@ -126,7 +124,7 @@ def parse_xml_agency_info_facility_detail(
     return lst
 
 
-def parse_xml_agency_info_inst_eqnm_info_list(
+def parse_agency_info_inst_eqnm_info_list(
     xml: BeautifulSoup,
 ) -> list[dict[str, Optional[str]]]:
     lst = []
@@ -149,6 +147,28 @@ def parse_xml_agency_info_inst_eqnm_info_list(
     return lst
 
 
+def classify_agency_search_type(t: str):
+    lst: list[dict[str, str]] = []
+    func_list = None
+    func_type = None
+    file_name = None
+
+    if t == TRAINING_AGENCY_INFO_SEARCH_TYPE["목록"]:
+        func_list = lst.append
+        func_type = parse_agency_info_default
+        file_name = "기관목록"
+    elif t == TRAINING_AGENCY_INFO_SEARCH_TYPE["시설"]:
+        func_list = lst.extend
+        func_type = parse_agency_info_facility_detail
+        file_name = "시설목록"
+    else:  # 장비
+        func_list = lst.extend
+        func_type = parse_agency_info_inst_eqnm_info_list
+        file_name = "장비목록"
+
+    return (lst, func_list, func_type, file_name)
+
+
 def get_training_inst_info_list(
     url: URL, save: bool = False, tl_df: Optional[pd.DataFrame] = None
 ) -> pd.DataFrame:
@@ -163,23 +183,9 @@ def get_training_inst_info_list(
         logging.error("훈련과정ID 또는 훈련과정 회차를 입력해주세요.")
         raise BadArgumentUsage("훈련과정ID 또는 훈련과정 회차 누락")
 
-    lst = []
-    func_list = None
-    func_type = None
-    file_name = None
-
-    if params["srchTorgId"] == TRAINING_AGENCY_INFO_SEARCH_TYPE["목록"]:
-        func_list = lst.append
-        func_type = parse_xml_agency_info_default
-        file_name = "기관목록"
-    elif params["srchTorgId"] == TRAINING_AGENCY_INFO_SEARCH_TYPE["시설"]:
-        func_list = lst.extend
-        func_type = parse_xml_agency_info_facility_detail
-        file_name = "시설목록"
-    else:  # 장비
-        func_list = lst.extend
-        func_type = parse_xml_agency_info_inst_eqnm_info_list
-        file_name = "장비목록"
+    lst, func_list, func_type, file_name = classify_agency_search_type(
+        params["srchTorgId"]
+    )
 
     iterable = (
         tl_df.values

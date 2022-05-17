@@ -52,13 +52,11 @@ def parse_xml_training_schedule(xml: BeautifulSoup, training_id: str) -> pd.Data
     return pd.DataFrame(lst)
 
 
-def get_traininig_schedule_info(url: URL, training_id: str):
-    return parse_xml_training_schedule(
-        get_api_response(url), training_id=training_id
-    )
+def get_training_schedule_info(url: URL, training_id: str) -> pd.DataFrame:
+    return parse_xml_training_schedule(get_api_response(url), training_id=training_id)
 
 
-def get_training_schedule_info_list(url: URL, df: pd.DataFrame):
+def get_training_schedule_info_list(url: URL, df: pd.DataFrame) -> pd.DataFrame:
 
     keys = df.keys().tolist()
     if not "훈련과정_순차" in keys or not "훈련과정ID" in keys:
@@ -74,6 +72,6 @@ def get_training_schedule_info_list(url: URL, df: pd.DataFrame):
         if n is not None:
             params["srchTrprDegr"] = n
 
-        lst.append(get_traininig_schedule_info(url, i))
+        lst.append(get_training_schedule_info(url, i))
 
     return pd.concat(lst, axis=0)

@@ -33,5 +33,10 @@ class URL:
 
     def set_parameter(self, dt: dict[str, str]):
         for k, v in dt.items():
-            self.__parameter[k] = v
+            if (v is None) and (k not in self.__parameter.keys()):
+                pass
+            elif (v is None):
+                self.__parameter.pop(k)
+            else:
+                self.__parameter[k] = v
 

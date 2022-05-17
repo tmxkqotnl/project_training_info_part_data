@@ -1,21 +1,15 @@
 import logging
 from typing import Optional
+from bs4 import BeautifulSoup
 import pandas as pd
 from url_controller import get_api_response
 from Class import URL
 from const import TRAINING_FOR_JOB_HUNTER
 
 
-def get_training_list(url: URL) -> Optional[pd.DataFrame]:
-    xml = get_api_response(url)
-    if xml is None:
-        logging.debug("get_training_list canceled")
-        return None
-
-    scn_list = xml.find("srchList").findAll("scn_list")
-
+def parse_training_list(scn_list: list[BeautifulSoup]) -> pd.DataFrame:
     n_lst = []
-    for i in lst:
+    for i in scn_list:
         address = i.find("address")
         contents = i.find("contents")
         courseMan = i.find("courseMan")
@@ -66,12 +60,12 @@ def get_training_list(url: URL) -> Optional[pd.DataFrame]:
                 "부제목 링크": subTitleLink.text if subTitleLink is not None else None,
                 "주관부처": superViser.text if superViser is not None else None,
                 "전화번호": telNo.text if telNo is not None else None,
-                "훈련시작(from)일자": traStartDate.text if traStartDate is not None else None,
-                "훈련시작(to)일자": traEndDate.text if traEndDate is not None else None,
+                "훈련시작시작일자": traStartDate.text if traStartDate is not None else None,
+                "훈련시작종료일자": traEndDate.text if traEndDate is not None else None,
                 "훈련대상": trainTarget.text if trainTarget is not None else None,
                 "훈련구분": trainTargetCd.text if trainTargetCd is not None else None,
                 "훈련기관ID": trainstCstId.text if trainstCstId is not None else None,
-                "훈련과정ID": trprId.text if trprId is not None else None,  # primary key
+                "훈련과정ID": trprId.text if trprId is not None else None,
                 "훈련과정_순차": trprDegr.text if trprDegr is not None else None,
             }
         )
@@ -79,6 +73,17 @@ def get_training_list(url: URL) -> Optional[pd.DataFrame]:
     return pd.DataFrame(n_lst)
 
 
+def get_training_list(url: URL) -> Optional[pd.DataFrame]:
+    xml = get_api_response(url)
+    if xml is None:
+        logging.debug("get_training_list canceled")
+        return None
+    
+    scn_list = xml.find("srchList").findAll("scn_list")
+    return parse_training_list(scn_list) if len(scn_list) != 0 else None
+
+
+# gonna be deprecated
 def get_all_training_list(api_key: str) -> pd.DataFrame:
     # 최대한 많이 가져오기 위해 sort와 sortcol을 이용한다.
     # 약 17만개 훈련과정

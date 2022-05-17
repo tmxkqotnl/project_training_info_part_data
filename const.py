@@ -30,8 +30,8 @@ TRAINING_FOR_ENTERPRISE = {
 
 TRAINING_FOR_MIDDLE_AGED = {
     "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_1.jsp",
-    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_2.jsp",
-    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_3.jsp",
+    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_2.jsp",
+    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_3.jsp",
 }
 
 # 과정/기관정보의 정보 타입

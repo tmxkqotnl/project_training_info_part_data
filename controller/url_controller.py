@@ -8,8 +8,7 @@ from libs import dict_to_query, error_handler
 from Class import URL
 
 
-@error_handler
-def get_full_url(url: URL) -> Optional[str]:
+def get_full_url(url: URL) -> str:
     base_url = url.get_url()
     if base_url is None:
         raise ValueError("URL is None")
@@ -21,9 +20,14 @@ def get_full_url(url: URL) -> Optional[str]:
 def get_api_response(
     url: URL, encoding: str = "utf-8", feat: str = "xml"
 ) -> Optional[BeautifulSoup]:
-    
-    res = requests.get(get_full_url(url))
-    
+
+    full_url = get_full_url(url)
+
+    logging.debug("Tried URL : {}".format(full_url))
+    res = requests.get(full_url,headers={
+        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36'
+    })
+
     if feat == "xml":
         feat = "lxml-xml"
     elif feat == "html":
@@ -34,8 +38,8 @@ def get_api_response(
 
     if xml_error_check:
         logging.warning("GET ERROR CODE")
-        logging.warning(xml.text)
-        raise requests.exceptions.RequestException(xml.text)
+        logging.warning(xml)
+        raise requests.exceptions.RequestException(xml)
     else:
         logging.debug("Success to get API reponse")
         logging.debug(res.status_code)
