@@ -1,11 +1,10 @@
-import logging
 import pandas as pd
-from Class.url import URL
-from src.const import COMMON_CODE
-from controller.url_controller import get_api_response
+from Class import URL
+from const import COMMON_CODE
+from url_controller import get_api_response
 import json
 
-from src.libs import error_handler
+from libs import error_handler
 
 
 @error_handler
@@ -23,7 +22,7 @@ def get_common_code(url: URL):
 
 # 훈련지역 중분류 코드 누락으로 수작업
 @error_handler
-def get_common_code_region_middle(json_path:str="../files/훈련지역_중분류_코드.json"):
+def get_common_code_region_middle(json_path: str = "../files/훈련지역_중분류_코드.json"):
     with open(json_path, "rb") as f:
         data = json.load(f)
         tmp = pd.DataFrame({"코드값": data["코드값"], "코드명": data["코드명"]})
@@ -37,7 +36,7 @@ def get_all_common_code(url: URL, save: bool = False):
     for k, v in COMMON_CODE.items():
         url.set_parameter({"srchType": v})
         tmp = get_common_code(url)
-        
+
         if save:
             file_name = "../files/common_code/" + "_".join(k.split()) + ".csv"
             tmp.to_csv(file_name, index=False)
@@ -47,9 +46,9 @@ def get_all_common_code(url: URL, save: bool = False):
 
     # 훈련지역 중분류 코드 누락으로 수작업
     middle = get_common_code_region_middle()
-    middle['구분'] = "훈련지역 중분류"
+    middle["구분"] = "훈련지역 중분류"
     if save:
-            middle.to_csv('../files/common_code/훈련지역_중분류_코드.csv', index=False)
+        middle.to_csv("../files/common_code/훈련지역_중분류_코드.csv", index=False)
 
     df = pd.concat([df, middle], axis=0, copy=True)
 

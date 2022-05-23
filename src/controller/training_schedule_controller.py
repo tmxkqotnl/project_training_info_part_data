@@ -1,7 +1,7 @@
 import logging
 from bs4 import BeautifulSoup
 import pandas as pd
-from Class.url import URL
+from Class import URL
 
 from controller.url_controller import get_api_response
 

@@ -6,6 +6,9 @@ INFO_TYPE = {"목록": "1", "과정/기관정보": "2", "훈련일정": "3", "�
 
 # HRD
 
+### 공통코드 URL
+COMMON_CODE_URL = "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA90/HRDPOA90_1.jsp"
+
 ### 구직자훈련과정 URL
 TRAINING_FOR_JOB_HUNTER = {
     "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA60/HRDPOA60_1.jsp",  # 구직자훈련과정 목록
@@ -44,9 +47,6 @@ TRAINING_AGENCY_INFO_SEARCH_TYPE = {
     "장비": "eqnm_detail",
 }
 
-
-### 공통코드 URL
-COMMON_CODE_URL = "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA90/HRDPOA90_1.jsp"
 
 ### 공통코드
 COMMON_CODE = {

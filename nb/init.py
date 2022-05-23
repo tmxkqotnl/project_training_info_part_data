@@ -9,7 +9,7 @@ parent_dir = dirname(dirname(realpath(__file__)))
 
 sys.path.append(parent_dir.replace("C:", "c:"))
 sys.path.append(join(parent_dir, "Class"))
-sys.path.append(join(parent_dir, "controller"))
+sys.path.append(join(parent_dir,"src","controller"))
 sys.path.append(join(parent_dir, "src"))
 
 load_dotenv(dotenv_path="../.env", verbose=True)

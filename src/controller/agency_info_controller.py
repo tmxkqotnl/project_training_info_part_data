@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 from click import BadArgumentUsage
 import pandas as pd
 from Class import URL
-from src.const import TRAINING_AGENCY_INFO_SEARCH_TYPE
-from controller.url_controller import get_api_response
+from const import TRAINING_AGENCY_INFO_SEARCH_TYPE
+from url_controller import get_api_response
 
 
 def parse_agency_info_default(xml: BeautifulSoup,) -> dict[str, Optional[str]]:  ## 기본

@@ -1,10 +1,9 @@
 import logging
-from time import sleep
 from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 
-from src.libs import dict_to_query, error_handler
+from libs import dict_to_query, error_handler
 from Class import URL
 
 
@@ -24,9 +23,12 @@ def get_api_response(
     full_url = get_full_url(url)
 
     logging.debug("{}".format(full_url))
-    res = requests.get(full_url,headers={
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36'
-    })
+    res = requests.get(
+        full_url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+        },
+    )
 
     if feat == "xml":
         feat = "lxml-xml"
@@ -44,25 +46,3 @@ def get_api_response(
         logging.debug("Success to get API reponse")
         logging.debug(res.status_code)
         return xml
-
-    # except requests.exceptions.Timeout as errd:
-    #     logging.exception("Timeout Error : ", errd)
-    # except requests.exceptions.ConnectionError as errc:
-    #     logging.exception("Error Connecting : ", errc)
-    # except requests.exceptions.HTTPError as errb:
-    #     logging.exception("Http Error : ", errb)
-    # Any Error except upper exception
-    # except requests.exceptions.MissingSchema as errm:
-    #     logging.exception(erra)
-
-    #     # temp
-    #     sleep(1)
-    #     get_api_response(url, encoding, feat)
-
-    # except requests.exceptions.RequestException as erra:
-    #     logging.exception(erra)
-
-    #     return None
-    # except ValueError:
-    #     return None
-

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from url_controller import get_api_response
 from Class import URL
-from src.const import TRAINING_FOR_JOB_HUNTER
+from const import TRAINING_FOR_JOB_HUNTER
 
 
 def parse_training_list(scn_list: list[BeautifulSoup]) -> pd.DataFrame:
@@ -78,7 +78,7 @@ def get_training_list(url: URL) -> Optional[pd.DataFrame]:
     if xml is None:
         logging.debug("get_training_list canceled")
         return None
-    
+
     scn_list = xml.find("srchList").findAll("scn_list")
     return parse_training_list(scn_list) if len(scn_list) != 0 else None
 
