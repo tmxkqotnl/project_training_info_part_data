@@ -4,7 +4,7 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 
-from libs import dict_to_query, error_handler
+from src.libs import dict_to_query, error_handler
 from Class import URL
 
 
@@ -23,7 +23,7 @@ def get_api_response(
 
     full_url = get_full_url(url)
 
-    logging.debug("Tried URL : {}".format(full_url))
+    logging.debug("{}".format(full_url))
     res = requests.get(full_url,headers={
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36'
     })
