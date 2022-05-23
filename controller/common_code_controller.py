@@ -1,11 +1,11 @@
 import logging
 import pandas as pd
 from Class.url import URL
-from const import COMMON_CODE
+from src.const import COMMON_CODE
 from controller.url_controller import get_api_response
 import json
 
-from libs import error_handler
+from src.libs import error_handler
 
 
 @error_handler

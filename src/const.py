@@ -14,24 +14,27 @@ TRAINING_FOR_JOB_HUNTER = {
     "4": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA60/HRDPOA60_4.jsp",  # 구직자훈련과정 훈련생 출결정보
 }
 
-### 근로자 훈련과정 URI
+### 근로자 훈련과정 URL
 TRAINING_FOR_WORKER = {
-    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_1.jsp",
-    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_2.jsp",
-    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_3.jsp",
-    "4": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_4.jsp",
+    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_1.jsp",  # 근로자훈련과정 목록
+    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_2.jsp",  # 근로자훈련과정 과정/기관정보
+    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_3.jsp",  # 근로자훈련과정 훈련일정
+    "4": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA61/HRDPOA61_4.jsp",  # 근로자훈련과정 훈련생 출결정보
 }
 
+### 기업 훈련과정 URL
 TRAINING_FOR_ENTERPRISE = {
-    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_1.jsp",
-    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_2.jsp",
-    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_3.jsp",
+    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_1.jsp",  # 기업훈련과정 목록
+    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_2.jsp",  # 기업훈련과정 과정/기관정보
+    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA62/HRDPOA62_3.jsp",  # 기업훈련과정 훈련일정
 }
 
+### 현재 비활성화된 과정 ###
+### 중장년특화훈련과정
 TRAINING_FOR_MIDDLE_AGED = {
-    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_1.jsp",
-    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_2.jsp",
-    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_3.jsp",
+    "1": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_1.jsp",  # 중장년특화훈련과정 목록
+    "2": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_2.jsp",  # 중장년특화훈련과정 과정/기관정보
+    "3": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA64/HRDPOA64_3.jsp",  # 중장년특화훈련과정 훈련일정
 }
 
 # 과정/기관정보의 정보 타입

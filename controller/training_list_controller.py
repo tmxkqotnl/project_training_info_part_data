@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from url_controller import get_api_response
 from Class import URL
-from const import TRAINING_FOR_JOB_HUNTER
+from src.const import TRAINING_FOR_JOB_HUNTER
 
 
 def parse_training_list(scn_list: list[BeautifulSoup]) -> pd.DataFrame:

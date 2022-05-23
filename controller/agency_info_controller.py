@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from click import BadArgumentUsage
 import pandas as pd
 from Class import URL
-from const import TRAINING_AGENCY_INFO_SEARCH_TYPE
+from src.const import TRAINING_AGENCY_INFO_SEARCH_TYPE
 from controller.url_controller import get_api_response
 
 
